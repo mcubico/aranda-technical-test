@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   dataSource: MatTableDataSource<Product>;
-  displayedColumns: string[] = ['name', 'description', 'category'];
+  displayedColumns: string[] = ['name', 'description', 'category', 'action'];
 
   constructor(
     private _productService: ProductService,
@@ -38,5 +38,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  add(data: Product): void {
+    console.log('add');
+  }
+
+  edit(data: Product): void {
+    console.log('edit');
+  }
+
+  delete(id: string): void {
+    console.log('delete');
   }
 }
