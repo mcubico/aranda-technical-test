@@ -1,7 +1,9 @@
-import { Product } from '../../../../models/product.model';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { Product } from '../../../../models/product.model';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-product-dialog',
@@ -16,12 +18,12 @@ export class ProductDialogComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public editData: Product,
-    private _dialogRef: MatDialogRef<ProductDialogComponent>
-  ) {
-    this.buildForm();
-  }
-
+    private _productService: ProductService,
+    private _dialogRef: MatDialogRef<ProductDialogComponent>,
+  ) { }
+  
   ngOnInit(): void {
+    this.buildForm();
     if (this.editData) {
       this.fillForm();
     }
@@ -60,16 +62,34 @@ export class ProductDialogComponent implements OnInit {
       this.update();
     else
       this.create();
-
-    //this.form.reset();
   }
 
   private create() {
-
+    this._productService.register(this.form.value)
+      .subscribe({
+        next: (data) => {
+          alert('Product added successfully');
+          this.form.reset();
+          this._dialogRef.close('save');
+        },
+        error: () => {
+          alert('Error while adding the product');
+        }
+      });
   }
 
   private update() {
-
+    this._productService.edit(this.form.value, this.editData.id)
+      .subscribe({
+        next: () => {
+          alert('Product updated successfully');
+          this.form.reset();
+          this._dialogRef.close('update');
+        },
+        error: () => {
+          alert('Error while updating the product');
+        }
+      })
   }
 
   notSubmit() {

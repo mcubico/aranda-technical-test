@@ -3,6 +3,6 @@ export interface Product {
   name: string,
   description?: string,
   category?: string,
-  picture: string,
-  active: boolean,
+  image?: string,
+  active?: boolean,
 }
