@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CreateProductDialogComponent } from '../dialog/create-product/create-product-dialog.component';
+import { ProductDialogComponent } from '../dialog/create-product/product-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -9,14 +9,14 @@ import { CreateProductDialogComponent } from '../dialog/create-product/create-pr
 })
 export class HeaderComponent implements OnInit {
   title = 'Aranda Technical Test';
-  
+
   constructor(private _dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
 
   openDialog() {
-    this._dialog.open(CreateProductDialogComponent, {
+    this._dialog.open(ProductDialogComponent, {
       width: '30%'
     });
   }

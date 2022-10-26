@@ -13,7 +13,7 @@ export class ProductService {
       {
         id: 'fc390589-ecc2-44f2-bdd2-64da3e6d87ec',
         name: 'Product 1',
-        category: 'Category 1',
+        category: 'Pants',
         description: 'Product description',
         picture: 'Picture path',
         active: true,
@@ -21,7 +21,7 @@ export class ProductService {
       {
         id: 'ca88c9d8-76c9-4dba-9f69-d726db3a7dba',
         name: 'Product 2',
-        category: 'Category 1',
+        category: 'Skirts',
         description: 'Product description',
         picture: 'Picture path',
         active: true,
@@ -29,7 +29,7 @@ export class ProductService {
       {
         id: '530961ed-fc53-46ea-af3a-f3c5822c97be',
         name: 'Product 3',
-        category: 'Category 1',
+        category: 'Jackets',
         description: 'Product description',
         picture: 'Picture path',
         active: true,
@@ -37,7 +37,7 @@ export class ProductService {
       {
         id: '79a7a3dc-08a6-40dd-b17f-aef49ea140a0',
         name: 'Product 4',
-        category: 'Category 1',
+        category: 'Coats',
         description: 'Product description',
         picture: 'Picture path',
         active: true,
@@ -45,7 +45,7 @@ export class ProductService {
       {
         id: 'cfca6cf9-cdff-4468-878e-06184fcfe7f3',
         name: 'Product 5',
-        category: 'Category 1',
+        category: 'Blouses',
         description: 'Product description',
         picture: 'Picture path',
         active: true,
