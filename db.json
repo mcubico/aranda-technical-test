@@ -1,18 +1,12 @@
 {
   "products": [
     {
-      "name": "Pantalón bota ancha 2",
+      "name": "Pantalon bota ancha",
       "category": "Pants",
-      "description": "Pantalón bota ancha",
+      "description": "Pantalón de bota ancha",
       "image": "",
-      "id": "a46054e5-0faf-442e-85f9-9cd4459ca123"
-    },
-    {
-      "name": "To edit 2",
-      "category": "Jackets",
-      "description": "",
-      "image": "",
-      "id": "a8aa4f5c-8f34-941a-f90a-237cc72e6f6f"
+      "id": "87895a1f-4b8b-57e7-a10a-adda08252dc4",
+      "active": true
     }
   ]
 }

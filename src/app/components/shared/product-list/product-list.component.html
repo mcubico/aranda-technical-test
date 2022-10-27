@@ -1,9 +1,9 @@
-<ng-container *ngIf="dataSource.data == null; else elseTemplate">
-  <h4 *ngIf="dataSource">No data</h4>
+<ng-container *ngIf="dataSource.data.length == 0; else elseTemplate">
+  <h4>No data</h4>
 </ng-container>
 <ng-template #elseTemplate>
   <div class="mat-elevation-z8">
-    <table *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort
+    <table mat-table [dataSource]="dataSource" matSort
       (matSortChange)="announceSortChange($event)">
       <!-- Name Column -->
       <ng-container matColumnDef="name">

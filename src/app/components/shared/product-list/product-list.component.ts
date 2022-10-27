@@ -25,9 +25,11 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   constructor(
     private _productService: ProductService,
     private _liveAnnouncer: LiveAnnouncer,
-    private _dialog: MatDialog) {  }
+    private _dialog: MatDialog) {
+    this.dataSource = new MatTableDataSource<Product>();
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit() {
     this.getAllProducts();
@@ -37,7 +39,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this._productService.all()
       .subscribe({
         next: (data) => {
-          this.dataSource = new MatTableDataSource<Product>(data);
+          this.dataSource.data = data;
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         },
