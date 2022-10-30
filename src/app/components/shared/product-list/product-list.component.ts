@@ -87,6 +87,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this._productService.delete(id).subscribe({
       next: () => {
         alert('Product deleted successfully');
+        this.setTotalProducts();
         this.getAllProducts();
       }
     });

@@ -31,7 +31,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Product image</mat-label>
       <mat-toolbar>
-        <input matInput readonly>
+        <input matInput formControlName="image" readonly [value]="fileName">
 
         <!-- Browse Button -->
         <button mat-flat-button color="primary">Browse</button>
@@ -39,7 +39,8 @@
       </mat-toolbar>
 
       <!-- Fetch selected filed on change -->
-      <input type="file" formControlName="image" #UploadFileInput id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" />
+      <input type="file" (change)="setFile($event)" formControlName="file" #UploadFileInput id="fileUpload" name="fileUpload" multiple="multiple"
+        accept="image/*" />
     </mat-form-field>
   </div>
 
