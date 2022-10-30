@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,6 +21,11 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   dataSource!: MatTableDataSource<Product>;
   displayedColumns: string[] = ['name', 'description', 'category', 'action'];
+  totalRows: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 5;
+  pageSizeOptions: number[] = [5, 10, 20, 50, 100];
+  isLoading: boolean = false;
 
   constructor(
     private _productService: ProductService,
@@ -29,24 +34,42 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this.dataSource = new MatTableDataSource<Product>();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.getAllProducts();
+    this.setTotalProducts();
+  }
 
   ngAfterViewInit() {
-    this.getAllProducts();
+    this.dataSource.paginator = this.paginator;
   }
 
   getAllProducts() {
-    this._productService.all()
+    this.isLoading = true;
+
+    this._productService.all(this.currentPage, this.pageSize)
       .subscribe({
         next: (data) => {
           this.dataSource.data = data;
           this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.isLoading = false;
         },
         error: (error) => {
           alert('Error while fetching the products');
+          this.isLoading = false;
         }
       });
+  }
+
+  setTotalProducts() {
+    this._productService.totalProducts()
+      .subscribe({
+        next: (total) => {
+          this.totalRows = total;
+        },
+        error: (error) => {
+          alert('Error while fetching total products');
+        }
+      })
   }
 
   edit(data: Product) {
@@ -67,6 +90,13 @@ export class ProductListComponent implements OnInit, AfterViewInit {
         this.getAllProducts();
       }
     });
+  }
+
+  pageChanged(event: PageEvent) {
+    console.log(event);
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getAllProducts();
   }
 
   announceSortChange(sortState: Sort) {

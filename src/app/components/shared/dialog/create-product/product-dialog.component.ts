@@ -21,7 +21,7 @@ export class ProductDialogComponent implements OnInit {
     private _productService: ProductService,
     private _dialogRef: MatDialogRef<ProductDialogComponent>,
   ) { }
-  
+
   ngOnInit(): void {
     this.buildForm();
     if (this.editData) {
@@ -35,7 +35,7 @@ export class ProductDialogComponent implements OnInit {
         name: ['', [Validators.required, Validators.minLength(3)]],
         category: ['', Validators.required],
         description: ['', Validators.maxLength(50)],
-        image: ['', Validators.required]
+        image: ['']
       }
     );
   }
@@ -56,6 +56,8 @@ export class ProductDialogComponent implements OnInit {
       Object.values(this.form.controls).forEach(control => {
         control.markAllAsTouched();
       });
+
+      return;
     }
 
     if (this.editData)

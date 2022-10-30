@@ -14,25 +14,31 @@ const CONTROLLER = 'products';
 export class ProductService {
   constructor(private _httpClient: HttpClient) { }
 
-  all(): Observable<Product[]> {
-    const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
+  all(page: number = 1, size: number = 5): Observable<Product[]> {
+    const endPoint = `${environment.api.urlBase}/${CONTROLLER}/${++page}/${size}`;
     return this._httpClient.get<Product[]>(endPoint);
   }
 
   register(data: Product): Observable<Product> {
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
     data.id = Guid.create().toString();
-    data.active = true;
     return this._httpClient.post<Product>(endPoint, data);
   }
 
   edit(data: Product, id: string): Observable<Product> {
-    const endPoint = `${environment.api.urlBase}/${CONTROLLER}/${id}`;
+    const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
+
+    data.id = id;
     return this._httpClient.put<Product>(endPoint, data);
   }
 
   delete(id: string) {
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}/${id}`;
     return this._httpClient.delete<Product>(endPoint);
+  }
+
+  totalProducts() {
+    const endPoint = `${environment.api.urlBase}/${CONTROLLER}/total`;
+    return this._httpClient.get<number>(endPoint);
   }
 }
