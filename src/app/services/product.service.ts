@@ -1,6 +1,6 @@
 import { Search } from './../models/search.model';
 import { Pagination } from './../models/pagination.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Guid } from "guid-typescript";
@@ -42,23 +42,41 @@ export class ProductService {
     return this._httpClient.delete<Product>(endPoint);
   }
 
-  all(paginationData: Pagination): Observable<Product[]> {
-    const endPoint = `${environment.api.urlBase}/${CONTROLLER}?page=${++paginationData.page}&itemsPerPage=${paginationData.size}&sortBy=${paginationData.sortBy}&directionAsc=${paginationData.directionAsc}`;
-    return this._httpClient.get<Product[]>(endPoint);
+  all(paginationData: Pagination): Observable<HttpResponse<Product[]>> {
+    const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
+    const queryParams = new HttpParams();
+    queryParams.append('page', ++paginationData.page);
+    queryParams.append('itemsPerPage', paginationData.size);
+    queryParams.append('sortBy', paginationData.sortBy ?? '');
+    queryParams.append('directionAsc', paginationData.directionAsc);
+
+    return this._httpClient.get<Product[]>(endPoint, {
+      observe: 'response',
+      params: queryParams
+    });
   }
 
-  search(filter: Search) {
-    let endPoint = `${environment.api.urlBase}/${CONTROLLER}?page=${++filter.page}&itemsPerPage=${filter.size}&sortBy=${filter.sortBy}&directionAsc=${filter.directionAsc}`;
+  search(filter: Search): Observable<HttpResponse<Product[]>> {
+    let endPoint = `${environment.api.urlBase}/${CONTROLLER}/filter`;
+    const queryParams = new HttpParams();
+    queryParams.append('page', ++filter.page);
+    queryParams.append('itemsPerPage', filter.size);
+    queryParams.append('sortBy', filter.sortBy ?? '');
+    queryParams.append('directionAsc', filter.directionAsc);
+    
     if (filter.name != undefined)
-      endPoint += `&name=${filter.name}`;
+      queryParams.append('name', filter.name);
 
     if (filter.description != undefined)
-      endPoint += `&description=${filter.description}`;
+      queryParams.append('description', filter.description);
 
     if (filter.category != undefined)
-      endPoint += `&category=${filter.category}`;
+      queryParams.append('category', filter.category);
 
-    return this._httpClient.get<Product[]>(endPoint);
+    return this._httpClient.get<Product[]>(endPoint, {
+      observe: 'response',
+      params: queryParams
+    });
   }
 
   totalProducts() {

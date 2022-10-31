@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/services/product.service';
 import { ProductDialogComponent } from '../dialog/create-product/product-dialog.component';
+import { Search } from 'src/app/models/search.model';
 
 @Component({
   selector: 'app-product-list',
@@ -62,9 +63,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
     this._productService.all(paginationData)
       .subscribe({
-        next: (data) => {
-          this.dataSource.data = data;
-          this.dataSource.sort = this.sort;
+        next: (response) => {
+          console.log(response.headers.has('x-total-records'));
+          this.dataSource.data = response.body ?? [];
           this.isLoading = false;
         },
         error: (error) => {
@@ -117,8 +118,6 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   announceSortChange(sortState: Sort) {
     this.sortActive = sortState.active;
 
-    console.log(sortState);
-
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction} ending`);
       this.sortDirectionAsc = sortState.direction == 'asc';
@@ -135,9 +134,10 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.setFilterValue(column, filterValue);
     if (filterValue.length >= 3)
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+      //this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.getAllProductsFiltered();
     else if (filterValue.length == 0)
-      this.dataSource.filter = '';
+      this.getAllProducts();
   }
 
   private setFilterValue(column: string, value: string) {
@@ -185,6 +185,36 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   private get categoryFilter(): string | undefined {
     return this._categoryFilter;
+  }
+
+  private getAllProductsFiltered() {
+    this.isLoading = true;
+
+    const filterData: Search = {
+      page: this.currentPage,
+      size: this.pageSize,
+      sortBy: this.sortActive,
+      directionAsc: this.sortDirectionAsc,
+      name: this.nameFilter,
+      description: this.descriptionFilter,
+      category: this.categoryFilter,
+    };
+
+    this._productService.search(filterData)
+      .subscribe({
+        next: (response) => {
+          this.dataSource.data = response.body ?? [];
+          this.dataSource.sort = this.sort;
+          if (response.headers.has('x-total-records'))
+            this.totalRows = Number(response.headers.has('x-total-records'));
+          
+          this.isLoading = false;
+        },
+        error: (error) => {
+          alert('Error while fetching the products');
+          this.isLoading = false;
+        }
+      });
   }
 
 }
