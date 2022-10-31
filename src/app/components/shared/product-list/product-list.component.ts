@@ -1,3 +1,4 @@
+import { Pagination } from './../../../models/pagination.model';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -26,8 +27,12 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   pageSize: number = 5;
   pageSizeOptions: number[] = [5, 10, 20, 50, 100];
   isLoading: boolean = false;
-  sortActive: string = 'name';
+  sortActive: string = '';
   sortDirectionAsc: boolean = true;
+
+  private _nameFilter: string | undefined;
+  private _descriptionFilter: string | undefined;
+  private _categoryFilter: string | undefined;
 
   constructor(
     private _productService: ProductService,
@@ -48,7 +53,14 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   getAllProducts() {
     this.isLoading = true;
 
-    this._productService.all(this.currentPage, this.pageSize, this.sortActive, this.sortDirectionAsc)
+    const paginationData: Pagination = {
+      page: this.currentPage,
+      size: this.pageSize,
+      sortBy: this.sortActive,
+      directionAsc: this.sortDirectionAsc
+    };
+
+    this._productService.all(paginationData)
       .subscribe({
         next: (data) => {
           this.dataSource.data = data;
@@ -117,6 +129,62 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     }
 
     this.getAllProducts();
+  }
+
+  applyFilter(event: Event, column: string) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.setFilterValue(column, filterValue);
+    if (filterValue.length >= 3)
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    else if (filterValue.length == 0)
+      this.dataSource.filter = '';
+  }
+
+  private setFilterValue(column: string, value: string) {
+    switch (column) {
+      case 'name':
+        this.nameFilter = value;
+        break;
+      case 'description':
+        this.descriptionFilter = value;
+        break;
+      case 'category':
+        this.categoryFilter = value;
+        break;
+    }
+  }
+
+  private set nameFilter(value: string | undefined) {
+    if (value != undefined && value.length >= 3)
+      this._nameFilter = value;
+    else
+      this._nameFilter = undefined;
+  }
+
+  private get nameFilter() : string | undefined {
+    return this._nameFilter;
+  }
+
+  private set descriptionFilter(value: string | undefined) {
+    if (value != undefined && value.length >= 3)
+      this._descriptionFilter = value;
+    else
+      this._descriptionFilter = undefined;
+  }
+
+  private get descriptionFilter(): string | undefined {
+    return this._descriptionFilter;
+  }
+
+  private set categoryFilter(value: string | undefined) {
+    if (value != undefined && value.length >= 3)
+      this._categoryFilter = value;
+    else
+      this._categoryFilter = undefined;
+  }
+
+  private get categoryFilter(): string | undefined {
+    return this._categoryFilter;
   }
 
 }

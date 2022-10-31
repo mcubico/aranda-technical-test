@@ -2,8 +2,29 @@
   <h4>No data</h4>
 </ng-container>
 <ng-template #elseTemplate>
-  <div class="mat-elevation-z8">
-    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+
+  <mat-card id="filters-table" class="mat-elevation-z3" fxLayout="row">
+
+    <mat-form-field appearance="standard" style="margin-right: 20px; width: 40%;">
+      <mat-label>Filter by Name</mat-label>
+      <input matInput (keyup)="applyFilter($event, 'name')" placeholder="Ex. jeans" #input>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard" style="margin-right: 20px; width: 40%;">
+      <mat-label>Filter by Description</mat-label>
+      <input matInput (keyup)="applyFilter($event, 'description')" placeholder="Ex. blue jeans" #input>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Filter by Category</mat-label>
+      <input matInput (keyup)="applyFilter($event, 'category')" placeholder="Ex. pants" #input>
+    </mat-form-field>
+
+  </mat-card>
+
+  <section id="table-container" class="mat-elevation-z8">
+
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
       <!-- Name Column -->
       <ng-container matColumnDef="name">
@@ -40,12 +61,12 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
     <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="currentPage"
       [length]="totalRows" (page)="pageChanged($event)" showFirstLastButtons aria-label="Select page">
     </mat-paginator>
-  </div>
+  </section>
 </ng-template>
