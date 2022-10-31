@@ -14,8 +14,8 @@ const CONTROLLER = 'products';
 export class ProductService {
   constructor(private _httpClient: HttpClient) { }
 
-  all(page: number = 1, size: number = 5): Observable<Product[]> {
-    const endPoint = `${environment.api.urlBase}/${CONTROLLER}/${++page}/${size}`;
+  all(page: number = 1, size: number = 5, sortBy: string = 'name', directionAsc: boolean = true): Observable<Product[]> {
+    const endPoint = `${environment.api.urlBase}/${CONTROLLER}?page=${++page}&itemsPerPage=${size}&sortBy=${sortBy}&directionAsc=${directionAsc}`;
     return this._httpClient.get<Product[]>(endPoint);
   }
 

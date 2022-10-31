@@ -26,6 +26,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   pageSize: number = 5;
   pageSizeOptions: number[] = [5, 10, 20, 50, 100];
   isLoading: boolean = false;
+  sortActive: string = 'name';
+  sortDirectionAsc: boolean = true;
 
   constructor(
     private _productService: ProductService,
@@ -46,7 +48,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   getAllProducts() {
     this.isLoading = true;
 
-    this._productService.all(this.currentPage, this.pageSize)
+    this._productService.all(this.currentPage, this.pageSize, this.sortActive, this.sortDirectionAsc)
       .subscribe({
         next: (data) => {
           this.dataSource.data = data;
@@ -101,11 +103,20 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   announceSortChange(sortState: Sort) {
+    this.sortActive = sortState.active;
+
+    console.log(sortState);
+
     if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction} ending`);
+      this.sortDirectionAsc = sortState.direction == 'asc';
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
+      this.sortActive = '';
+      this.sortDirectionAsc = true;
     }
+
+    this.getAllProducts();
   }
 
 }
