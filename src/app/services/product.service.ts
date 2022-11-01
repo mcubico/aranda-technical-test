@@ -1,4 +1,4 @@
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Search } from './../models/search.model';
 import { Pagination } from './../models/pagination.model';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
@@ -31,6 +31,10 @@ export class ProductService {
           this.productRegistered = true;
 
           return response;
+        }),
+        catchError(() => {
+          this.isLoading = false;
+          return [];
         })
       );
   }
@@ -60,6 +64,10 @@ export class ProductService {
         map((response) => {
           this.isLoading = false;
           return response;
+        }),
+        catchError(() => {
+          this.isLoading = false;
+          return [];
         })
       );
   }
@@ -80,6 +88,10 @@ export class ProductService {
       map((response) => {
         this.isLoading = false;
         return response;
+      }),
+      catchError(() => {
+        this.isLoading = false;
+        return [];
       })
     );
   }
@@ -109,6 +121,10 @@ export class ProductService {
       map((response) => {
         this.isLoading = false;
         return response;
+      }),
+      catchError(() => {
+        this.isLoading = false;
+        return [];
       })
     );
   }
@@ -121,6 +137,10 @@ export class ProductService {
       map((response) => {
         this.isLoading = false;
         return response;
+      }),
+      catchError(() => {
+        this.isLoading = false;
+        return [];
       })
     );
   }
