@@ -45,7 +45,6 @@ export class ProductDialogComponent implements OnInit {
   }
 
   fillForm() {
-    console.log(this.editData);
     this.submitButtonName = 'Update';
 
     this.form.controls['name'].setValue(this.editData.name);
@@ -54,9 +53,6 @@ export class ProductDialogComponent implements OnInit {
   }
 
   save(): void {
-    console.log(this.form);
-
-
     if (this.form.invalid) {
       Object.values(this.form.controls).forEach(control => {
         control.markAllAsTouched();
@@ -74,14 +70,14 @@ export class ProductDialogComponent implements OnInit {
   private create() {
     this._productService.register(this.form.value, this._file)
       .subscribe({
-        next: (data) => {
+        next: () => {
           alert('Product added successfully');
           this.form.reset();
           this._dialogRef.close('save');
           window.location.reload();
         },
-        error: () => {
-          alert('Error while adding the product');
+        error: (error) => {
+          console.error('Error while adding the product', error);
         }
       });
   }
@@ -94,8 +90,8 @@ export class ProductDialogComponent implements OnInit {
           this.form.reset();
           this._dialogRef.close('update');
         },
-        error: () => {
-          alert('Error while updating the product');
+        error: (error) => {
+          console.error('Error while updating the product', error);
         }
       })
   }
@@ -103,7 +99,6 @@ export class ProductDialogComponent implements OnInit {
   setFile(event: any) {
     this._file = event.target.files[0];
     this.fileName = this._file.name;
-    console.log(this._file);
   }
 
   notSubmit() {

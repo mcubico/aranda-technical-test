@@ -2,7 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -17,6 +17,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card'
 import { OnlineStatusModule } from 'ngx-online-status';
 
+import { HttpConfigInterceptor } from './interceptors/http-config.interceptor';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -25,6 +27,8 @@ import { HeaderComponent } from './components/shared/header/header.component';
 import { ProductDialogComponent } from './components/shared/dialog/create-product/product-dialog.component';
 import { ProductListComponent } from './components/shared/product-list/product-list.component';
 import { OfflineComponent } from './components/shared/offline/offline.component';
+import { HttpErrorDialogComponent } from './components/shared/dialog/http-error-dialog/http-error-dialog.component';
+import { HttpErrorDialogService } from './services/http-error-dialog.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +39,7 @@ import { OfflineComponent } from './components/shared/offline/offline.component'
     ProductDialogComponent,
     ProductListComponent,
     OfflineComponent,
+    HttpErrorDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +62,15 @@ import { OfflineComponent } from './components/shared/offline/offline.component'
     MatCardModule,
     OnlineStatusModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpConfigInterceptor,
+      multi: true
+    },
+    HttpErrorDialogService
+  ],
+  entryComponents: [HttpErrorDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

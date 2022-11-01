@@ -17,9 +17,7 @@ export class ProductService {
   constructor(private _httpClient: HttpClient) { }
 
   register(data: Product, file?: File): Observable<Product> {
-    const formData = this.convertToFormData(data, file)
-
-    console.log(formData);
+    const formData = this.convertToFormData(data, file);
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
 
     data.id = Guid.create().toString();
@@ -29,9 +27,7 @@ export class ProductService {
 
   edit(data: Product, id: string, file?: File): Observable<Product> {
     data.id = id;
-    const formData = this.convertToFormData(data, file)
-
-    console.log(formData);
+    const formData = this.convertToFormData(data, file);
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
 
     return this._httpClient.put<Product>(endPoint, formData);

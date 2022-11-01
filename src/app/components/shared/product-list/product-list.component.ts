@@ -5,6 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { Product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/services/product.service';
@@ -69,8 +70,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.log(error);
-          alert('Error while fetching the products');
+          console.error('Error while fetching the products', error);
           this.isLoading = false;
         }
       });
@@ -83,7 +83,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           this.totalRows = total;
         },
         error: (error) => {
-          alert('Error while fetching total products');
+          console.error('Error while fetching total products', error);
         }
       })
   }
@@ -110,7 +110,6 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   pageChanged(event: PageEvent) {
-    console.log(event);
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
     this.getAllProducts();
@@ -214,7 +213,6 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this._productService.search(filterData)
       .subscribe({
         next: (response) => {
-          console.log(response);
           this.dataSource.data = response.body ?? [];
           this.dataSource.sort = this.sort;
           if (response.headers.has('x-total-records'))
@@ -223,7 +221,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         },
         error: (error) => {
-          alert('Error while fetching the products');
+          console.error('Error while fetching the products', error);
           this.isLoading = false;
         }
       });
