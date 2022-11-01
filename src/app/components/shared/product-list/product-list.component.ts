@@ -1,11 +1,10 @@
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Pagination } from './../../../models/pagination.model';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { Product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/services/product.service';
@@ -18,9 +17,10 @@ import { Search } from 'src/app/models/search.model';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, AfterViewInit {
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  @Input() reload: boolean = false;
 
   dataSource!: MatTableDataSource<Product>;
   displayedColumns: string[] = ['name', 'description', 'category', 'action'];
@@ -28,7 +28,6 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   currentPage: number = 0;
   pageSize: number = 5;
   pageSizeOptions: number[] = [5, 10, 20, 50, 100];
-  isLoading: boolean = false;
   sortActive: string = '';
   sortDirectionAsc: boolean = true;
 
@@ -52,9 +51,15 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  getAllProducts() {
-    this.isLoading = true;
+  ngAfterContentChecked(): void {
+    if (this._productService.productRegistered) {
+      this.getAllProducts();
+      this.setTotalProducts();
+      this._productService.productRegistered = false;
+    }
+  }
 
+  getAllProducts() {
     const paginationData: Pagination = {
       page: this.currentPage,
       size: this.pageSize,
@@ -67,11 +72,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
         next: (response) => {
           this.dataSource.data = response.body ?? [];
           this.dataSource.sort = this.sort;
-          this.isLoading = false;
         },
         error: (error) => {
           console.error('Error while fetching the products', error);
-          this.isLoading = false;
         }
       });
   }
@@ -150,6 +153,11 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this.getAllProducts();
   }
 
+  public get isLoading() : boolean {
+    return this._productService.isLoading;
+  }
+
+
   private setFilterValue(column: string, value: string) {
     switch (column) {
       case 'name':
@@ -198,8 +206,6 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   private getAllProductsFiltered() {
-    this.isLoading = true;
-
     const filterData: Search = {
       page: this.currentPage,
       size: this.pageSize,
@@ -217,12 +223,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           if (response.headers.has('x-total-records'))
             this.totalRows = Number(response.headers.has('x-total-records'));
-
-          this.isLoading = false;
         },
         error: (error) => {
           console.error('Error while fetching the products', error);
-          this.isLoading = false;
         }
       });
   }

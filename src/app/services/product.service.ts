@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { Search } from './../models/search.model';
 import { Pagination } from './../models/pagination.model';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
@@ -17,28 +18,54 @@ export class ProductService {
   constructor(private _httpClient: HttpClient) { }
 
   register(data: Product, file?: File): Observable<Product> {
+    this.isLoading = true;
     const formData = this.convertToFormData(data, file);
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
 
     data.id = Guid.create().toString();
 
-    return this._httpClient.post<Product>(endPoint, formData);
+    return this._httpClient.post<Product>(endPoint, formData)
+      .pipe(
+        map((response) => {
+          this.isLoading = false;
+          this.productRegistered = true;
+
+          return response;
+        })
+      );
   }
 
   edit(data: Product, id: string, file?: File): Observable<Product> {
+    this.isLoading = true;
     data.id = id;
+
     const formData = this.convertToFormData(data, file);
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
 
-    return this._httpClient.put<Product>(endPoint, formData);
+    return this._httpClient.put<Product>(endPoint, formData)
+      .pipe(
+        map((response) => {
+          this.isLoading = false;
+          return response;
+        })
+      );;
   }
 
   delete(id: string) {
+    this.isLoading = true;
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}/${id}`;
-    return this._httpClient.delete<Product>(endPoint);
+
+    return this._httpClient.delete<Product>(endPoint)
+      .pipe(
+        map((response) => {
+          this.isLoading = false;
+          return response;
+        })
+      );;
   }
 
   all(paginationData: Pagination): Observable<HttpResponse<Product[]>> {
+    this.isLoading = true;
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
     let queryParams = new HttpParams();
     queryParams = queryParams.append('page', ++paginationData.page);
@@ -49,10 +76,16 @@ export class ProductService {
     return this._httpClient.get<Product[]>(endPoint, {
       observe: 'response',
       params: queryParams
-    });
+    }).pipe(
+      map((response) => {
+        this.isLoading = false;
+        return response;
+      })
+    );
   }
 
   search(filter: Search): Observable<HttpResponse<Product[]>> {
+    this.isLoading = true;
     let endPoint = `${environment.api.urlBase}/${CONTROLLER}/filter`;
     let queryParams = new HttpParams();
     queryParams = queryParams.append('page', ++filter.page);
@@ -72,12 +105,24 @@ export class ProductService {
     return this._httpClient.get<Product[]>(endPoint, {
       observe: 'response',
       params: queryParams
-    });
+    }).pipe(
+      map((response) => {
+        this.isLoading = false;
+        return response;
+      })
+    );
   }
 
   totalProducts() {
+    this.isLoading = true;
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}/total`;
-    return this._httpClient.get<number>(endPoint);
+
+    return this._httpClient.get<number>(endPoint).pipe(
+      map((response) => {
+        this.isLoading = false;
+        return response;
+      })
+    );
   }
 
   private convertToFormData(data: Product, file?: File): FormData {
@@ -93,4 +138,23 @@ export class ProductService {
 
     return formData;
   }
+
+  private _isLoading: boolean = false;
+  public get isLoading() : boolean {
+    return this._isLoading;
+  }
+  public set isLoading(v : boolean) {
+    this._isLoading = v;
+  }
+
+
+  private _productRegistered : boolean = false;
+  public get productRegistered() : boolean {
+    return this._productRegistered;
+  }
+  public set productRegistered(v : boolean) {
+    this._productRegistered = v;
+  }
+
+
 }

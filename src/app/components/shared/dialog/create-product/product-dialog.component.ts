@@ -11,7 +11,6 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-dialog.component.css']
 })
 export class ProductDialogComponent implements OnInit {
-
   form !: FormGroup;
   submitButtonName: string = 'Save';
   fileName: string = '';
@@ -74,7 +73,6 @@ export class ProductDialogComponent implements OnInit {
           alert('Product added successfully');
           this.form.reset();
           this._dialogRef.close('save');
-          window.location.reload();
         },
         error: (error) => {
           console.error('Error while adding the product', error);
