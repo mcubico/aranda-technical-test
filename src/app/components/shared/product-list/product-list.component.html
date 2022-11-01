@@ -1,5 +1,6 @@
 <ng-container *ngIf="dataSource.data.length == 0; else elseTemplate">
   <h4>No data</h4>
+  <button mat-raised-button color="warn" (click)="refresh()" mat>Refresh</button>
 </ng-container>
 <ng-template #elseTemplate>
   <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>

@@ -44,11 +44,11 @@ export class ProductService {
 
   all(paginationData: Pagination): Observable<HttpResponse<Product[]>> {
     const endPoint = `${environment.api.urlBase}/${CONTROLLER}`;
-    const queryParams = new HttpParams();
-    queryParams.append('page', ++paginationData.page);
-    queryParams.append('itemsPerPage', paginationData.size);
-    queryParams.append('sortBy', paginationData.sortBy ?? '');
-    queryParams.append('directionAsc', paginationData.directionAsc);
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('page', ++paginationData.page);
+    queryParams = queryParams.append('itemsPerPage', paginationData.size);
+    queryParams = queryParams.append('sortBy', paginationData.sortBy ?? '');
+    queryParams = queryParams.append('directionAsc', paginationData.directionAsc);
 
     return this._httpClient.get<Product[]>(endPoint, {
       observe: 'response',
@@ -58,20 +58,20 @@ export class ProductService {
 
   search(filter: Search): Observable<HttpResponse<Product[]>> {
     let endPoint = `${environment.api.urlBase}/${CONTROLLER}/filter`;
-    const queryParams = new HttpParams();
-    queryParams.append('page', ++filter.page);
-    queryParams.append('itemsPerPage', filter.size);
-    queryParams.append('sortBy', filter.sortBy ?? '');
-    queryParams.append('directionAsc', filter.directionAsc);
-    
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('page', ++filter.page);
+    queryParams = queryParams.append('itemsPerPage', filter.size);
+    queryParams = queryParams.append('sortBy', filter.sortBy ?? '');
+    queryParams = queryParams.append('directionAsc', filter.directionAsc);
+
     if (filter.name != undefined)
-      queryParams.append('name', filter.name);
+      queryParams = queryParams.append('name', filter.name);
 
     if (filter.description != undefined)
-      queryParams.append('description', filter.description);
+      queryParams = queryParams.append('description', filter.description);
 
     if (filter.category != undefined)
-      queryParams.append('category', filter.category);
+      queryParams = queryParams.append('category', filter.category);
 
     return this._httpClient.get<Product[]>(endPoint, {
       observe: 'response',

@@ -64,8 +64,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this._productService.all(paginationData)
       .subscribe({
         next: (response) => {
-          console.log(response.headers.has('x-total-records'));
           this.dataSource.data = response.body ?? [];
+          this.dataSource.sort = this.sort;
           this.isLoading = false;
         },
         error: (error) => {
@@ -133,11 +133,21 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event, column: string) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.setFilterValue(column, filterValue);
-    if (filterValue.length >= 3)
-      //this.dataSource.filter = filterValue.trim().toLowerCase();
-      this.getAllProductsFiltered();
-    else if (filterValue.length == 0)
+
+    if (filterValue.length == 0 && this.filtersEmpty()) {
       this.getAllProducts();
+      return;
+    }
+
+    if (filterValue.length >= 3 || filterValue.length == 0)
+      this.getAllProductsFiltered();
+  }
+
+  refresh() {
+    this.nameFilter = undefined;
+    this.descriptionFilter = undefined;
+    this.categoryFilter = undefined;
+    this.getAllProducts();
   }
 
   private setFilterValue(column: string, value: string) {
@@ -203,11 +213,12 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this._productService.search(filterData)
       .subscribe({
         next: (response) => {
+          console.log(response);
           this.dataSource.data = response.body ?? [];
           this.dataSource.sort = this.sort;
           if (response.headers.has('x-total-records'))
             this.totalRows = Number(response.headers.has('x-total-records'));
-          
+
           this.isLoading = false;
         },
         error: (error) => {
@@ -215,6 +226,10 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         }
       });
+  }
+
+  private filtersEmpty(): Boolean {
+    return this.nameFilter == undefined && this.descriptionFilter == undefined && this.categoryFilter == undefined;
   }
 
 }
