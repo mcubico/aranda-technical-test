@@ -10,6 +10,7 @@ import { Product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/services/product.service';
 import { ProductDialogComponent } from '../dialog/create-product/product-dialog.component';
 import { Search } from 'src/app/models/search.model';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-product-list',
@@ -38,7 +39,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   constructor(
     private _productService: ProductService,
     private _liveAnnouncer: LiveAnnouncer,
-    private _dialog: MatDialog) {
+    private _dialog: MatDialog,
+    private _notificationAlert: NotificationService) {
     this.dataSource = new MatTableDataSource<Product>();
   }
 
@@ -105,9 +107,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   delete(id: string) {
     this._productService.delete(id).subscribe({
       next: () => {
-        alert('Product deleted successfully');
         this.setTotalProducts();
         this.getAllProducts();
+        this._notificationAlert.showSnackbarAction('Product deleted successfully');
       }
     });
   }

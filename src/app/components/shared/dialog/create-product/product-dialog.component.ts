@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Product } from '../../../../models/product.model';
 import { ProductService } from 'src/app/services/product.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-product-dialog',
@@ -22,6 +23,7 @@ export class ProductDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public editData: Product,
     private _productService: ProductService,
     private _dialogRef: MatDialogRef<ProductDialogComponent>,
+    private _notificationAlert: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -70,9 +72,9 @@ export class ProductDialogComponent implements OnInit {
     this._productService.register(this.form.value, this._file)
       .subscribe({
         next: () => {
-          alert('Product added successfully');
           this.form.reset();
           this._dialogRef.close('save');
+          this._notificationAlert.showSnackbarAction('Product added successfully');
         },
         error: (error) => {
           console.error('Error while adding the product', error);
@@ -84,7 +86,7 @@ export class ProductDialogComponent implements OnInit {
     this._productService.edit(this.form.value, this.editData.id, this._file)
       .subscribe({
         next: () => {
-          alert('Product updated successfully');
+          this._notificationAlert.showSnackbarAction('Product updated successfully');
           this.form.reset();
           this._dialogRef.close('update');
         },

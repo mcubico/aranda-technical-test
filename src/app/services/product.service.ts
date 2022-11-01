@@ -48,7 +48,7 @@ export class ProductService {
           this.isLoading = false;
           return response;
         })
-      );;
+      );
   }
 
   delete(id: string) {
@@ -61,7 +61,7 @@ export class ProductService {
           this.isLoading = false;
           return response;
         })
-      );;
+      );
   }
 
   all(paginationData: Pagination): Observable<HttpResponse<Product[]>> {
@@ -143,6 +143,7 @@ export class ProductService {
   public get isLoading() : boolean {
     return this._isLoading;
   }
+
   public set isLoading(v : boolean) {
     this._isLoading = v;
   }
@@ -152,6 +153,7 @@ export class ProductService {
   public get productRegistered() : boolean {
     return this._productRegistered;
   }
+
   public set productRegistered(v : boolean) {
     this._productRegistered = v;
   }
