@@ -1,10 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
+import { NotificationService } from 'src/app/services/notification.service';
 import { Product } from '../../../../models/product.model';
 import { ProductService } from 'src/app/services/product.service';
-import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-product-dialog',

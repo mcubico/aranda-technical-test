@@ -1,5 +1,5 @@
-import { HttpErrorModel } from './../../../../models/http-error.model';
 import { Component, Inject } from '@angular/core';
+import { HttpErrorModel } from './../../../../models/http-error.model';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({

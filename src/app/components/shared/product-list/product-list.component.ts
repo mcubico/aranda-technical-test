@@ -1,16 +1,15 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { Pagination } from './../../../models/pagination.model';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-
-import { Product } from 'src/app/models/product.model';
-import { ProductService } from 'src/app/services/product.service';
-import { ProductDialogComponent } from '../dialog/create-product/product-dialog.component';
-import { Search } from 'src/app/models/search.model';
 import { NotificationService } from 'src/app/services/notification.service';
+import { Pagination } from './../../../models/pagination.model';
+import { Product } from 'src/app/models/product.model';
+import { ProductDialogComponent } from '../dialog/create-product/product-dialog.component';
+import { ProductService } from 'src/app/services/product.service';
+import { Search } from 'src/app/models/search.model';
 
 @Component({
   selector: 'app-product-list',

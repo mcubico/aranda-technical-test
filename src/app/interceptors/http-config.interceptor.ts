@@ -1,5 +1,3 @@
-import { Injectable } from '@angular/core';
-
 import {
   HttpInterceptor,
   HttpRequest,
@@ -7,11 +5,11 @@ import {
   HttpEvent,
   HttpErrorResponse
 } from '@angular/common/http';
-
-import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
 import { HttpErrorDialogService } from '../services/http-error-dialog.service';
 import { HttpErrorModel } from '../models/http-error.model';
+import { Injectable } from '@angular/core';
+import { map, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {

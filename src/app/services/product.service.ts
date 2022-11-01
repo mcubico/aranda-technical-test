@@ -1,13 +1,12 @@
-import { map, catchError } from 'rxjs/operators';
-import { Search } from './../models/search.model';
-import { Pagination } from './../models/pagination.model';
+import { environment } from '../../environments/environment';
+import { Guid } from "guid-typescript";
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Guid } from "guid-typescript";
-
+import { Pagination } from './../models/pagination.model';
 import { Product } from '../models/product.model';
-import { environment } from '../../environments/environment';
+import { Search } from './../models/search.model';
 
 const CONTROLLER = 'products';
 

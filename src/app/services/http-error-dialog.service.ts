@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { HttpErrorDialogComponent } from '../components/shared/dialog/http-error-dialog/http-error-dialog.component';
 import { HttpErrorModel } from '../models/http-error.model';
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable()
 export class HttpErrorDialogService {
