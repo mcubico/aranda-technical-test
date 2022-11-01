@@ -69,6 +69,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         },
         error: (error) => {
+          console.log(error);
           alert('Error while fetching the products');
           this.isLoading = false;
         }

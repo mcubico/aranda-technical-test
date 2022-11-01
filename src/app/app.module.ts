@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card'
+import { OnlineStatusModule } from 'ngx-online-status';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +24,7 @@ import { PageNotFoundComponent } from './pages/error/page-not-found/page-not-fou
 import { HeaderComponent } from './components/shared/header/header.component';
 import { ProductDialogComponent } from './components/shared/dialog/create-product/product-dialog.component';
 import { ProductListComponent } from './components/shared/product-list/product-list.component';
+import { OfflineComponent } from './components/shared/offline/offline.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { ProductListComponent } from './components/shared/product-list/product-l
     HeaderComponent,
     ProductDialogComponent,
     ProductListComponent,
+    OfflineComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,7 @@ import { ProductListComponent } from './components/shared/product-list/product-l
     MatSelectModule,
     MatProgressBarModule,
     MatCardModule,
+    OnlineStatusModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
